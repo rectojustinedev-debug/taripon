@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import tsConfigPaths from "vite-tsconfig-paths";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 
@@ -18,6 +17,7 @@ export default defineConfig({
     transformer: "lightningcss",
   },
   resolve: {
+    tsconfigPaths: true,
     alias: {
       "@": `${process.cwd()}/src`,
     },
@@ -25,7 +25,6 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tanstackStart({
       server: { entry: "server" },
       importProtection: {

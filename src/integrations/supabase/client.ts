@@ -151,10 +151,26 @@ function createSupabaseClient() {
   // degrades gracefully instead of crashing every route.
   const SUPABASE_URL =
     import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || FALLBACK_SUPABASE_URL;
+
+  // Prefer the new-format publishable key when the configured env var is
+  // still the old JWT format (`eyJ...`). Auth API calls made from this
+  // client — signUp(), resend(), updateUser() (used to finish a password
+  // reset after the emailed link is clicked), etc. — silently fail against
+  // an old-format anon key even though data queries still work, which made
+  // this bug easy to miss. Mirrors the same guard already applied to the
+  // server-side client in auth-actions.functions.ts.
+  const rawKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
   const SUPABASE_PUBLISHABLE_KEY =
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.SUPABASE_PUBLISHABLE_KEY ||
-    FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+    rawKey && isNewSupabaseApiKey(rawKey) ? rawKey : FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+
+  if (rawKey && !isNewSupabaseApiKey(rawKey)) {
+    console.warn(
+      "[Supabase] VITE_SUPABASE_PUBLISHABLE_KEY is in the old JWT format, which silently " +
+        "fails on Auth API calls (signUp, resend, updateUser, etc). Falling back to the " +
+        "built-in new-format key. Update VITE_SUPABASE_PUBLISHABLE_KEY to the new " +
+        "`sb_publishable_...` key from Supabase → Project Settings → API to remove this warning.",
+    );
+  }
 
   if (SUPABASE_URL === FALLBACK_SUPABASE_URL) {
     console.warn(
