@@ -207,7 +207,9 @@ function HelpPage() {
     <AppShell title={t("help.title")}>
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="rounded-3xl border border-border bg-gradient-to-br from-secondary/60 to-blush/40 p-5 sm:p-8">
-          <p className="text-sm text-gradient-primary dark:text-white sm:text-base">{t("help.subtitle")}</p>
+          <p className="text-sm text-gradient-primary dark:text-white sm:text-base">
+            {t("help.subtitle")}
+          </p>
           <div className="relative mt-4">
             <Icon
               icon={faMagnifyingGlass}

@@ -11,7 +11,7 @@ const isGitHubPages = process.env.GITHUB_ACTIONS === "true";
 export default defineConfig({
   base: isGitHubPages && repoName ? `/${repoName}/` : "/",
   server: {
-    host: "::",
+    host: true,
     port: 8080,
   },
   css: {

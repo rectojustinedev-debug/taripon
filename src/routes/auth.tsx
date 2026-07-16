@@ -129,7 +129,7 @@ function AuthPage() {
               )}
             </div>
 
-           <p className="mt-6 text-center text-sm text-muted-foreground">
+            <p className="mt-6 text-center text-sm text-muted-foreground">
               {tab !== "login" && (
                 <>
                   Already have an account?{" "}
@@ -217,8 +217,8 @@ function AuthPage() {
               Grow your savings, one peso at a time.
             </p>
             <p className="mt-2 text-sm text-primary-foreground/80">
-              TARIPON keeps every goal, entry, and milestone organized so your progress is always
-              in view.
+              TARIPON keeps every goal, entry, and milestone organized so your progress is always in
+              view.
             </p>
           </div>
 
@@ -473,8 +473,8 @@ function ForgotPasswordDialog({
                 </DialogTitle>
                 <DialogDescription className="text-center text-sm">
                   If an account exists for{" "}
-                  <span className="font-semibold text-foreground">{email}</span>, a reset link is
-                  on its way. It expires in 1 hour.
+                  <span className="font-semibold text-foreground">{email}</span>, a reset link is on
+                  its way. It expires in 1 hour.
                 </DialogDescription>
               </DialogHeader>
 
@@ -760,7 +760,6 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
         {submitting && <Icon icon={faSpinner} className="animate-spin" />}
         Create account
       </button>
-      
     </form>
   );
 }
