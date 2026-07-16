@@ -428,15 +428,30 @@ function ForgotPasswordDialog({
   }, [cooldown]);
 
   async function handleReset() {
+    if (submitting) return; // guard against double-fire (Enter key + click)
+
     const parsed = emailSchema.safeParse(email);
     if (!parsed.success) {
-      setFieldError(parsed.error.issues[0]?.message ?? "Enter a valid email address.");
+      const message = parsed.error.issues[0]?.message ?? "Enter a valid email address.";
+      setFieldError(message);
+      // Validation failures used to be silent (just a small red label under
+      // the input, easy to miss) — surface a toast too so "nothing happens"
+      // is never the actual experience.
+      toast.error(message);
       return;
     }
     setFieldError(null);
     setSubmitting(true);
     try {
       const result = await requestPasswordResetAction({ data: { email: parsed.data } });
+      console.log("[ForgotPasswordDialog] requestPasswordResetAction result:", result);
+
+      if (!result) {
+        // Server function returned nothing usable — shouldn't happen, but
+        // fail loudly instead of quietly doing nothing.
+        toast.error("Something went wrong. Please try again.");
+        return;
+      }
       if (result.error) {
         toast.error(result.error);
         return;
@@ -444,6 +459,8 @@ function ForgotPasswordDialog({
       setSent(true);
       setCooldown(30);
     } catch (err) {
+      // Network failure, server function threw, rate limit exceeded, etc.
+      console.error("[ForgotPasswordDialog] requestPasswordResetAction threw:", err);
       toast.error(err instanceof Error ? err.message : "Could not send reset link. Try again.");
     } finally {
       setSubmitting(false);
