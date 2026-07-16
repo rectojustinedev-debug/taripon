@@ -14,7 +14,7 @@ import { passwordResetEmail } from "./lib/email-templates";
 // Usage:
 //   npm run test:mail -- someone@example.com                  -> sends to that address (origin defaults to localhost:8080)
 //   npm run test:mail -- someone@example.com https://taripon.app  -> reset link points at that origin
-const DEFAULT_ORIGIN = "http://localhost:8080";
+const DEFAULT_ORIGIN = "https://taripon.vercel.app/";
 
 async function main() {
   const recipient = process.argv[2]?.trim();
