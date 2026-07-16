@@ -1,0 +1,392 @@
+@import "tailwindcss";
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Taripon — Harvest Jade design system.
+ * All colors use oklch. Add new tokens in :root and .dark, then register
+ * inside @theme inline so they resolve as Tailwind utilities.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-glow: var(--primary-glow);
+  --color-primary-deep: var(--primary-deep);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-soft: var(--accent-gold-soft);
+  --color-accent-clay: var(--accent-clay);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-leaf-0: var(--leaf-0);
+  --color-leaf-1: var(--leaf-1);
+  --color-leaf-2: var(--leaf-2);
+  --color-leaf-3: var(--leaf-3);
+  --color-leaf-4: var(--leaf-4);
+  --color-blush: var(--blush);
+  --color-blush-foreground: var(--blush-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.85rem;
+
+  /* Harvest Jade — light. Warm paper neutrals (not green-tinted) so the
+     palette reads as considered rather than "everything is mint." Primary
+     is a deep, saturated jade; gold is a true muted harvest gold used only
+     for milestones and highlights, never as a base surface color. */
+  --background: oklch(1 0 0);                     /* white */
+  --foreground: oklch(0.19 0.02 155);             /* deep pine ink */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.19 0.02 155);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.19 0.02 155);
+
+  --primary: oklch(0.465 0.125 162);              /* rich, saturated jade */
+  --primary-foreground: oklch(0.99 0.006 95);
+  --primary-dark: oklch(0.325 0.09 163);          /* deep forest for hover */
+  --primary-glow: oklch(0.69 0.15 158);           /* bright jade for glows */
+  --primary-deep: oklch(0.24 0.075 164);          /* deepest jade, gradient anchor */
+
+  --accent-gold: oklch(0.635 0.135 75);           /* true harvest gold */
+  --accent-gold-soft: oklch(0.93 0.045 80);       /* champagne chip bg */
+  --accent-clay: oklch(0.685 0.12 40);            /* baked-clay coin accent, used sparingly */
+
+  --secondary: oklch(0.94 0.025 155);             /* pale mint chip bg */
+  --secondary-foreground: oklch(0.29 0.055 163);
+  --muted: oklch(0.955 0.006 162);                /* neutral cool-gray, no warm/cream cast */
+  --muted-foreground: oklch(0.47 0.02 145);
+  --accent: oklch(0.99 0.004 162);                /* neutral white, no cream cast */
+  --accent-foreground: oklch(0.29 0.055 163);
+
+  --destructive: oklch(0.55 0.17 32);             /* warm terracotta red */
+  --destructive-foreground: oklch(0.99 0.006 95);
+
+  --success: oklch(0.58 0.135 155);
+  --success-foreground: oklch(0.99 0.006 95);
+
+  /* Calendar heatmap ramp — no activity (0) to highest activity (4). */
+  --leaf-0: oklch(0.955 0.006 162);
+  --leaf-1: oklch(0.87 0.05 155);
+  --leaf-2: oklch(0.76 0.09 158);
+  --leaf-3: oklch(0.61 0.12 160);
+  --leaf-4: oklch(0.465 0.125 162);
+
+  /* Cute accent — soft blush, used for playful highlights, badges & empty states */
+  --blush: oklch(0.92 0.035 20);
+  --blush-foreground: oklch(0.45 0.13 20);
+
+  --border: oklch(0.885 0.012 162);
+  --input: oklch(0.78 0.02 162);
+  --ring: oklch(0.69 0.15 158);
+
+  --chart-1: oklch(0.465 0.125 162);
+  --chart-2: oklch(0.69 0.15 158);
+  --chart-3: oklch(0.635 0.135 75);
+  --chart-4: oklch(0.58 0.09 220);
+  --chart-5: oklch(0.36 0.09 163);
+
+  --sidebar: oklch(0.975 0.006 162);
+  --sidebar-foreground: oklch(0.19 0.02 155);
+  --sidebar-primary: oklch(0.465 0.125 162);
+  --sidebar-primary-foreground: oklch(0.99 0.006 95);
+  --sidebar-accent: oklch(0.94 0.025 155);
+  --sidebar-accent-foreground: oklch(0.29 0.055 163);
+  --sidebar-border: oklch(0.885 0.012 162);
+  --sidebar-ring: oklch(0.69 0.15 158);
+
+  --gradient-primary: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-dark) 45%, var(--primary) 100%);
+  --gradient-gold: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 55%, var(--primary-deep) 100%);
+  --shadow-elegant: 0 24px 60px -30px color-mix(in oklab, var(--primary) 42%, transparent);
+  --shadow-soft: 0 8px 24px -12px color-mix(in oklab, var(--primary-dark) 16%, transparent);
+}
+
+.dark {
+  /* Harvest Jade — dark. A deeper, less green-saturated pine-black base
+     with a Spotify-style elevation scale (background < card < popover <
+     muted/secondary), a vivid jade accent for CTAs, and a warm gold that
+     pops against the dark surface for milestones and highlights. */
+  --background: oklch(0.225 0.022 165);          /* deep pine-black */
+  --foreground: oklch(0.96 0.008 85);            /* warm off-white, matches light mode paper tone */
+  --card: oklch(0.29 0.03 163);                  /* first elevation step */
+  --card-foreground: oklch(0.96 0.008 85);
+  --popover: oklch(0.325 0.032 163);             /* second elevation step */
+  --popover-foreground: oklch(0.96 0.008 85);
+
+  --primary: oklch(0.72 0.17 158);               /* vivid jade */
+  --primary-foreground: oklch(0.12 0.02 163);    /* dark text sits on top of green */
+  --primary-dark: oklch(0.58 0.145 160);         /* readable green for text-on-dark */
+  --primary-glow: oklch(0.82 0.17 155);
+  --primary-deep: oklch(0.28 0.06 163);          /* deep pine-jade, gradient start only */
+
+  --accent-gold: oklch(0.775 0.135 78);
+  --accent-gold-soft: oklch(0.32 0.06 80);
+  --accent-clay: oklch(0.72 0.115 42);
+
+  --secondary: oklch(0.355 0.038 163);           /* third elevation step */
+  --secondary-foreground: oklch(0.96 0.008 85);
+  --muted: oklch(0.31 0.03 163);
+  --muted-foreground: oklch(0.71 0.018 100);     /* dimmer, more WCAG-friendly vs. body text */
+  --accent: oklch(0.34 0.038 163);
+  --accent-foreground: oklch(0.96 0.008 85);
+
+  --destructive: oklch(0.655 0.165 32);
+  --destructive-foreground: oklch(0.98 0.006 95);
+
+  --success: oklch(0.72 0.15 158);
+  --success-foreground: oklch(0.12 0.02 163);
+
+  --leaf-0: oklch(0.31 0.03 163);
+  --leaf-1: oklch(0.40 0.06 160);
+  --leaf-2: oklch(0.50 0.10 159);
+  --leaf-3: oklch(0.61 0.135 159);
+  --leaf-4: oklch(0.72 0.17 158);
+
+  --blush: oklch(0.33 0.05 20);
+  --blush-foreground: oklch(0.87 0.07 20);
+
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 24%);
+  --ring: oklch(0.72 0.17 158);
+
+  --chart-1: oklch(0.72 0.17 158);
+  --chart-2: oklch(0.58 0.13 163);
+  --chart-3: oklch(0.775 0.135 78);
+  --chart-4: oklch(0.62 0.10 220);
+  --chart-5: oklch(0.44 0.09 163);
+
+  --sidebar: oklch(0.225 0.022 165);             /* matches the pine-black background */
+  --sidebar-foreground: oklch(0.94 0.012 85);
+  --sidebar-primary: oklch(0.72 0.17 158);
+  --sidebar-primary-foreground: oklch(0.12 0.02 163);
+  --sidebar-accent: oklch(0.34 0.036 163);
+  --sidebar-accent-foreground: oklch(0.94 0.012 85);
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: oklch(0.72 0.17 158);
+
+  --gradient-primary: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-dark) 45%, var(--primary) 100%);
+  --gradient-gold: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 55%, var(--primary-glow) 100%);
+  --shadow-elegant: 0 24px 60px -30px color-mix(in oklab, var(--primary) 38%, transparent);
+  --shadow-soft: 0 8px 24px -12px oklch(0 0 0 / 50%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    /* Prevent layout shift from scrollbar appearing */
+    overflow-y: scroll;
+  }
+
+  /*
+   * Smooth theme switching: fade background/border/text colors instead of
+   * snapping instantly. Scoped to color-ish properties only, so layout,
+   * transform, and other animations are untouched. The initial theme class
+   * is set by a blocking script before paint (see __root.tsx), so this never
+   * runs on first load — only on an explicit toggle afterwards.
+   */
+  *,
+  *::before,
+  *::after {
+    transition:
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+}
+
+/*
+ * Manrope (our --font-sans) doesn't ship a ₱ (peso sign, U+20B1) glyph, so
+ * the browser silently substitutes it from a fallback font per-character.
+ * Depending on the fallback chosen, that glyph's metrics don't line up with
+ * Manrope's, which was rendering as a stray horizontal line cutting through
+ * the amount next to it. Money text gets its own stack that's guaranteed to
+ * carry the peso glyph natively, plus tabular figures so digits don't jitter
+ * as amounts change.
+ */
+@utility font-currency {
+  font-family: "Noto Sans", Arial, Helvetica, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+
+@utility bg-gradient-primary {
+  background-image: var(--gradient-primary);
+}
+
+@utility bg-gradient-gold {
+  background-image: var(--gradient-gold);
+}
+
+@utility text-gradient-primary {
+  background-image: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility shadow-elegant {
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+/* Hide scrollbars while keeping scroll functional */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remove 300ms tap delay on mobile, no highlight flash */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Smooth anchor-link scrolling offset for sticky header */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Fixed/sticky elements should promote to own layer */
+.fixed,
+.sticky {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Page transitions via tw-animate-css */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: fadeInUp 180ms ease-out both;
+}
+
+/* Cute micro-interactions — a gentle bounce on tap/hover for primary actions */
+@keyframes cuteBounce {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.08); }
+  60% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.hover-bounce:hover {
+  animation: cuteBounce 420ms ease-in-out;
+}
+
+@utility bg-blush {
+  background-color: var(--color-blush);
+}
+
+@utility text-blush-foreground {
+  color: var(--color-blush-foreground);
+}
+
+/*
+ * Signature texture — "woven ledger": a quiet diagonal lattice referencing
+ * the woven abaca/rattan alkansya (coin baskets) and palengke ledger books
+ * this app is named after (tipon = "to gather, to save"). Used sparingly:
+ * hero backdrops and section transitions only, never on interactive
+ * surfaces. Colors are baked into the data-URI as currentColor won't work
+ * in a background-image, so it's tuned to sit quietly on both themes via
+ * low, fixed-opacity strokes.
+ */
+@utility bg-weave {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%2312694f' stroke-width='1' stroke-opacity='0.09'%3E%3Cpath d='M0 14 L14 0 M0 42 L42 0 M14 56 L56 14 M42 56 L56 42'/%3E%3Cpath d='M0 28 L28 0 M28 56 L56 28'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Scattered-coin ambient motif — replaces generic gradient "orbs" behind
+   the landing hero and dashboard summary card with small jade/gold/clay
+   discs, like coins settled at the bottom of an alkansya. */
+@utility bg-coin-scatter {
+  background-image:
+    radial-gradient(circle at 12% 22%, color-mix(in oklab, var(--color-primary-glow) 55%, transparent) 0 7px, transparent 8px),
+    radial-gradient(circle at 82% 12%, color-mix(in oklab, var(--color-accent-gold) 55%, transparent) 0 5px, transparent 6px),
+    radial-gradient(circle at 92% 55%, color-mix(in oklab, var(--color-accent-clay) 50%, transparent) 0 4px, transparent 5px),
+    radial-gradient(circle at 65% 85%, color-mix(in oklab, var(--color-primary) 45%, transparent) 0 6px, transparent 7px),
+    radial-gradient(circle at 28% 70%, color-mix(in oklab, var(--color-accent-gold) 40%, transparent) 0 3px, transparent 4px),
+    radial-gradient(circle at 45% 40%, color-mix(in oklab, var(--color-primary-glow) 35%, transparent) 0 3px, transparent 4px);
+  background-repeat: no-repeat;
+}

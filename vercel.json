@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/vercel",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "tanstack-start",
+  "outputDirectory": ".output/public",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "regions": ["sfo1"]
+}
