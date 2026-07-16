@@ -43,33 +43,69 @@ function ResetPassword() {
   useEffect(() => {
     let settled = false;
 
-    // Supabase's recovery link redirects here with tokens in the URL hash;
-    // supabase-js picks those up automatically and fires PASSWORD_RECOVERY
-    // once the session is established. We also check for an existing
-    // session up front in case that already happened before this effect
-    // ran. If neither shows up within a few seconds, the link is treated
-    // as missing/expired/already-used rather than leaving the page stuck
-    // on a spinner forever.
-    supabase.auth.getSession().then(({ data }) => {
-      if (!settled && data.session) {
-        settled = true;
-        setState("ready");
+    function settle(next: LinkState) {
+      if (settled) return;
+      settled = true;
+      setState(next);
+    }
+
+    // Supabase recovery links can arrive in two shapes depending on your
+    // Supabase project's auth flow setting:
+    //   1. Implicit flow: tokens in the URL *hash*
+    //      (#access_token=...&type=recovery)
+    //   2. PKCE flow: a one-time `code` in the URL *query string*
+    //      (?code=...)
+    // supabase-js's detectSessionInUrl only auto-handles case 1. Case 2
+    // needs an explicit exchangeCodeForSession call, and without it a
+    // valid PKCE link fell through to "Link expired" every time.
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get("code");
+    const errorDescription =
+      url.searchParams.get("error_description") || url.hash.match(/error_description=([^&]+)/)?.[1];
+
+    async function init() {
+      if (errorDescription) {
+        // Supabase redirected back with an explicit error (expired/used
+        // link, etc.) — no point waiting further.
+        console.warn("[ResetPassword] link error from Supabase:", decodeURIComponent(errorDescription));
+        settle("invalid");
+        return;
       }
-    });
+
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+          console.error("[ResetPassword] exchangeCodeForSession failed:", error.message);
+          settle("invalid");
+          return;
+        }
+        settle("ready");
+        return;
+      }
+
+      // Implicit flow: check for an existing/just-established session up
+      // front in case detectSessionInUrl already ran before this effect.
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("[ResetPassword] getSession failed:", error.message);
+      }
+      if (data.session) {
+        settle("ready");
+      }
+    }
+
+    init();
 
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (!settled && (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN")) {
-        settled = true;
-        setState("ready");
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
+        settle("ready");
       }
     });
 
-    const timeout = setTimeout(() => {
-      if (!settled) {
-        settled = true;
-        setState("invalid");
-      }
-    }, 4000);
+    // Give the implicit-flow hash parsing time to complete before giving
+    // up. If a `code` or error was already found above, this timeout is
+    // effectively moot since init() settles synchronously in those cases.
+    const timeout = setTimeout(() => settle("invalid"), 6000);
 
     return () => {
       sub.subscription.unsubscribe();
