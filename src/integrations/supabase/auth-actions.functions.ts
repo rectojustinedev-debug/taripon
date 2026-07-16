@@ -149,6 +149,14 @@ export const requestPasswordResetAction = createServerFn({ method: "POST" })
       enforceRateLimit(ipKey("reset-password", ip), 10, 60 * 60 * 1000);
       enforceRateLimit(ipKey("reset-password", ip, email), 3, 60 * 60 * 1000);
     } catch (error) {
+      // Rate limiting is a very common cause of "I clicked it and nothing
+      // happened" during testing (repeated clicks eat the 3/hour cap fast).
+      // Log it clearly so it shows up in Vercel logs instead of looking
+      // like a silent backend failure.
+      console.warn(
+        `[requestPasswordResetAction] rate limit hit for ${ip} / ${email}:`,
+        error instanceof Error ? error.message : error,
+      );
       friendlyRateLimitError(error);
     }
 
@@ -210,11 +218,25 @@ export const requestPasswordResetAction = createServerFn({ method: "POST" })
         const { subject, html, text } = passwordResetEmail({ actionLink, email });
         const result = await sendMail({ to: [{ email }], subject, html, text });
         if (!result.success) {
-          console.error("[requestPasswordResetAction] Brevo send failed:", result.error);
+          // Log the *real* Brevo error (e.g. "Sender not valid", "invalid
+          // credentials") — this is the single most useful line for
+          // diagnosing "reset link never arrives", so it must not be
+          // reduced to a generic message before it hits the logs.
+          console.error(
+            `[requestPasswordResetAction] Brevo send failed for ${email}:`,
+            result.error,
+          );
           return { ok: false, error: "Could not send reset email. Please try again." };
         }
+        console.log(
+          `[requestPasswordResetAction] Brevo send succeeded for ${email}, messageId:`,
+          result.messageId,
+        );
       } catch (error) {
-        console.error("[requestPasswordResetAction] Brevo send threw:", error);
+        console.error(
+          `[requestPasswordResetAction] Brevo send threw for ${email}:`,
+          error instanceof Error ? error.message : error,
+        );
         return { ok: false, error: "Could not send reset email. Please try again." };
       }
 
