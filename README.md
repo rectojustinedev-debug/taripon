@@ -93,7 +93,7 @@ https://bcunytrpoodnvlktxrxj.supabase.co
 
 Open your Supabase project:
 
-https://supabase.com/dashboard/project/bcunytrpoodnvlktxrxj
+------------------------------------------
 
 Navigate to:
 
