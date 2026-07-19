@@ -397,7 +397,7 @@ function Landing() {
             <Logo />
           </div>
           <p>
-            {`\u00a9 ${new Date().getFullYear()} TARIPON. Designed and powered by Tine Develops. All rights reserved.`}
+            {`\u00a9 ${new Date().getFullYear()} TARIPON. Designed and powered by Coziestine Develops. All rights reserved.`}
           </p>
         </div>
       </footer>
